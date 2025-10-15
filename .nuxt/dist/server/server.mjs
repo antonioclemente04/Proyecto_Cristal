@@ -1,0 +1,1 @@
+export { default } from "file:///C:/Users/Anto%C3%B1o/CascadeProjects/windsurf-project/nuxt-app/node_modules/@nuxt/vite-builder/dist/runtime/vite-node.mjs"
