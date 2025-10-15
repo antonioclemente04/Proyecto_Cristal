@@ -646,9 +646,7 @@ const _inlineRuntimeConfig = {
       }
     }
   },
-  "public": {
-    "siteName": "Nuxt Template"
-  }
+  "public": {}
 };
 const envOptions = {
   prefix: "NITRO_",
@@ -1021,7 +1019,7 @@ const _qMXdaf2Z5xyzDcljtO4GSkXzw95iCpnRp2Pdt7HcoRk = (function(nitro) {
 
 const rootDir = "C:/Users/Antoño/CascadeProjects/windsurf-project/nuxt-app";
 
-const appHead = {"meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1"},{"name":"description","content":"A modern Nuxt.js template with Tailwind CSS"}],"link":[{"rel":"icon","type":"image/x-icon","href":"/favicon.ico"},{"rel":"preconnect","href":"https://fonts.googleapis.com"},{"rel":"preconnect","href":"https://fonts.gstatic.com","crossorigin":"anonymous"},{"rel":"stylesheet","href":"https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"}],"style":[],"script":[],"noscript":[],"title":"Nuxt Template"};
+const appHead = {"meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1"}],"link":[],"style":[],"script":[],"noscript":[],"title":"Mi Proyecto"};
 
 const appRootTag = "div";
 
