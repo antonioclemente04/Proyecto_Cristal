@@ -24,6 +24,9 @@
 
 <script setup>
 // GlassStack.vue — Axonometric orthographic stack of equal-size square glass cards with thickness
+// This version: centered composition, orthographic axonometry (X=+20°, Y=-40°),
+// equal visual size for all cards, correct face lighting (right/top), hover disables depthTest.
+
 import { ref, onMounted, onBeforeUnmount, watch, computed } from 'vue'
 import * as THREE from 'three'
 import { useRouter } from 'vue-router'
@@ -32,11 +35,17 @@ const props = defineProps({
   projects: { type: Array, default: () => [] },
   count: { type: Number, default: 12 },
   highlightIndex: { type: Number, default: 6 },
-  // smaller square cards
-  size: { type: Object, default: () => ({ w: 320, h: 320, depth: 12 }) },
-  // arrange left-to-right, upward: increase X and increase Y for later items
-  initialPos: { type: Object, default: () => ({ x: -560, y: -220, z: 0 }) },
-  step: { type: Object, default: () => ({ dx: 160, dy: 120, dz: -40 }) },
+
+  /* --------- TUNE THESE VALUES ---------
+     - size.w / size.h : card width/height in scene units (px-like)
+     - size.depth      : card thickness
+     - step.dx / step.dy : separation between cards (controls diagonal slope)
+     - step.dz         : stacking order offset (small value; in orthographic it doesn't change apparent size)
+     - initialPos      : start position before centering (centering code will normalize)
+  -------------------------------------- */
+  size: { type: Object, default: () => ({ w: 420, h: 420, depth: 18 }) }, // change size/depth here
+  initialPos: { type: Object, default: () => ({ x: -640, y: -300, z: 0 }) },
+  step: { type: Object, default: () => ({ dx: 220, dy: 160, dz: -20 }) }, // change distance between cards here
   fallbackBreakpoint: { type: Number, default: 720 }
 })
 
@@ -48,7 +57,7 @@ const wrapper = ref(null)
 const canvasContainer = ref(null)
 let renderer = null
 const scene = new THREE.Scene()
-let camera = null // will be OrthographicCamera
+let camera = null // OrthographicCamera
 let animationId = null
 let raycaster = new THREE.Raycaster()
 const pointer = new THREE.Vector2()
@@ -62,10 +71,16 @@ const placeholderLarge = '/images/reloj.webp'
 const projectsPreview = computed(() => props.projects.slice(0, props.count))
 const projectsForNav = computed(() => props.projects.slice(0, props.count))
 
-// Interaction tuning
-const SIDE_HOVER_OFFSET = 220
-const SCALE_HOVER = 1.03 // keep almost same size
+// Interaction tuning (edit here if you want different hover behaviour)
+let SIDE_HOVER_OFFSET = -220
+let SCALE_HOVER = 1.03
 const LERP_SPEED = 0.16
+let scrollDepth = 0 // global Z offset driven by scroll
+const SCROLL_MIN = -220
+const SCROLL_MAX = 220
+const SCROLL_SPEED = 0.6 // wheel sensitivity
+
+function clamp(v, a, b) { return Math.min(b, Math.max(a, v)) }
 
 // Stack group — rotate group to create axonometric orientation
 let stackGroup = null
@@ -119,24 +134,31 @@ function createMeshes() {
     const large = p.image || placeholderLarge
 
     const frontTex = loadTextureSmall(small)
+
+    // Front material (textured, slightly translucent)
     const frontMat = new THREE.MeshPhysicalMaterial({
       map: frontTex,
-      roughness: 0.22,
-      metalness: 0.03,
-      transmission: 0.14,
+      roughness: 0.18,
+      metalness: 0.02,
+      transmission: 0.12,
       clearcoat: 0.06,
       transparent: true,
+      opacity: 0.78, // overall transparency — change for more/less glass look
       side: THREE.FrontSide,
       ior: 1.5
     })
 
-    // side/back materials (slightly darker glass)
-    const sideMat = new THREE.MeshPhysicalMaterial({ color: 0x0b0b0b, roughness: 0.6, metalness: 0.05, transmission: 0.02, transparent: true })
+    // Side materials: make left/top slightly lighter to emphasize top-left edge.
+    // Order for BoxGeometry groups: +X, -X, +Y, -Y, +Z(front), -Z(back)
+    const rightMat = new THREE.MeshPhysicalMaterial({ color: 0x0b0b0b, roughness: 0.66, metalness: 0.01, transmission: 0.02, transparent: true, opacity: 0.58 })
+    const leftMat  = new THREE.MeshPhysicalMaterial({ color: 0x161718, roughness: 0.44, metalness: 0.02, transmission: 0.05, transparent: true, opacity: 0.66 })
+    const topMat   = new THREE.MeshPhysicalMaterial({ color: 0x131314, roughness: 0.36, metalness: 0.02, transmission: 0.04, transparent: true, opacity: 0.66 })
+    const bottomMat= new THREE.MeshPhysicalMaterial({ color: 0x0b0b0b, roughness: 0.7, metalness: 0.01, transmission: 0.02, transparent: true, opacity: 0.54 })
+    const backMat  = new THREE.MeshPhysicalMaterial({ color: 0x060607, roughness: 0.8, metalness: 0.0, transmission: 0.01, transparent: true, opacity: 0.5 })
 
     // create box geometry and assign materials array
     const geo = new THREE.BoxGeometry(w, h, depth)
-    // materials order: +X, -X, +Y, -Y, +Z, -Z (three.js BoxGeometry group order)
-    const materials = [sideMat, sideMat, sideMat, sideMat, frontMat, sideMat]
+    const materials = [ rightMat, leftMat, topMat, bottomMat, frontMat, backMat ]
 
     const mesh = new THREE.Mesh(geo, materials)
 
@@ -146,7 +168,7 @@ function createMeshes() {
     mesh.position.set(pos.x, pos.y, pos.z)
     mesh.scale.setScalar(computeScale(i))
 
-    // store userData for animation lerp
+    // store userData for animation lerp and reference to materials (for hover toggles)
     mesh.userData = {
       index: i,
       id: p.id ?? `placeholder-${i}`,
@@ -164,7 +186,8 @@ function createMeshes() {
       baseScale: 1,
       currentScale: 1,
       targetScale: 1,
-      depth: depth
+      depth: depth,
+      mats: { front: frontMat, right: rightMat, left: leftMat, top: topMat, bottom: bottomMat, back: backMat }
     }
 
     mesh.renderOrder = i
@@ -176,16 +199,31 @@ function createMeshes() {
   }
 }
 
-// Hover behavior: lateral translation relative to group, slight forward (Z more negative -> visually above stack) and small scale
+// Hover behavior: lateral translation relative to group, slight forward and small scale
 function setHover(mesh) {
+  // disable depthTest/depthWrite for hovered mesh materials so it renders above others reliably
+  if (mesh.userData && mesh.userData.mats) {
+    Object.values(mesh.userData.mats).forEach(m => {
+      m.depthTest = false
+      m.depthWrite = false
+      m.transparent = true
+    })
+  }
   mesh.userData.targetX = mesh.userData.baseX + SIDE_HOVER_OFFSET
-  mesh.userData.targetZ = mesh.userData.baseZ - 60 // bring slightly forward in group local coords
+  mesh.userData.targetZ = mesh.userData.baseZ + scrollDepth - 80 // bring slightly forward relative to scroll depth
   mesh.userData.targetScale = SCALE_HOVER
-  mesh.renderOrder = 9999
+  mesh.renderOrder = 10000
 }
 function clearHover(mesh) {
+  // restore depthTest/depthWrite
+  if (mesh.userData && mesh.userData.mats) {
+    Object.values(mesh.userData.mats).forEach(m => {
+      m.depthTest = true
+      m.depthWrite = true
+    })
+  }
   mesh.userData.targetX = mesh.userData.baseX
-  mesh.userData.targetZ = mesh.userData.baseZ
+  mesh.userData.targetZ = mesh.userData.baseZ + scrollDepth
   mesh.userData.targetScale = mesh.userData.baseScale
   mesh.renderOrder = mesh.userData.index
 }
@@ -197,7 +235,7 @@ function initScene() {
 
   const w = container.clientWidth
   const h = container.clientHeight
-  // frustum size tuned for comfortable scale — adjust FRUSTUM_BASE if needed
+  // FRUSTUM_BASE controls overall zoom. Reduce to fit more, increase to zoom in.
   const FRUSTUM_BASE = 1200
   const aspect = w / h
   const frustumHalfHeight = FRUSTUM_BASE / 2
@@ -215,28 +253,48 @@ function initScene() {
 
   // create stack group and rotate it to axonometric orientation
   stackGroup = new THREE.Group()
-  // rotate so that left->right ascends up: rotate around Y positive and tilt X negative
-  stackGroup.rotation.set(THREE.MathUtils.degToRad(-30), THREE.MathUtils.degToRad(45), 0)
+  // ROTATION: X smaller tilt so less pronounced, Y negative so cards face left
+  // Edit these two values to control axonometric angle:
+  stackGroup.rotation.set(THREE.MathUtils.degToRad(20), THREE.MathUtils.degToRad(-40), 0)
   scene.add(stackGroup)
 
-  // lighting
+  // lighting: key from top-left-front so left/top edges highlight
   const amb = new THREE.AmbientLight(0xffffff, 0.6)
   scene.add(amb)
-  const key = new THREE.DirectionalLight(0xffffff, 0.9)
-  key.position.set(-800, 1000, 1200)
+  const key = new THREE.DirectionalLight(0xffffff, 0.95)
+  key.position.set(-800, 1200, 900)
   scene.add(key)
-  const rim = new THREE.PointLight(0x94fff0, 0.18, 4000)
+  const fill = new THREE.DirectionalLight(0x667788, 0.12)
+  fill.position.set(600, -200, -400)
+  scene.add(fill)
+  const rim = new THREE.PointLight(0x94fff0, 0.12, 4000)
   rim.position.set(1000, 500, 1000)
   scene.add(rim)
 
+  // build meshes and then center the whole stack group
   createMeshes()
+
+  // ----------- CENTER THE STACK GROUP -------------
+  // compute bounding box of all children and shift group so its center sits at origin (0,0,0)
+  // this keeps the composition centred in the camera view regardless of count/step/size
+  const box = new THREE.Box3().setFromObject(stackGroup)
+  const center = new THREE.Vector3()
+  box.getCenter(center)
+  stackGroup.position.sub(center)
+  // optionally offset group slightly upward visually (uncomment/change as needed)
+  // stackGroup.position.y += 40
+  // ------------------------------------------------
 
   // events
   onResize()
   window.addEventListener('resize', onResize)
-  container.addEventListener('pointermove', onPointerMove)
-  container.addEventListener('pointerdown', onPointerDown)
-  window.addEventListener('scroll', onScroll, { passive: true })
+  const containerElem = container
+  containerElem.addEventListener('pointermove', onPointerMove)
+  containerElem.addEventListener('pointerdown', onPointerDown)
+  // Wheel & touch to drive local depth; prevent page scroll
+  containerElem.addEventListener('wheel', onWheel, { passive: false })
+  containerElem.addEventListener('touchstart', onTouchStart, { passive: true })
+  containerElem.addEventListener('touchmove', onTouchMove, { passive: false })
   window.addEventListener('keydown', onKeyDown)
 
   animate()
@@ -244,11 +302,15 @@ function initScene() {
 
 function disposeScene() {
   window.removeEventListener('resize', onResize)
-  window.removeEventListener('scroll', onScroll)
   window.removeEventListener('keydown', onKeyDown)
   const container = canvasContainer.value
-  if (container) container.removeEventListener('pointermove', onPointerMove)
-  if (container) container.removeEventListener('pointerdown', onPointerDown)
+  if (container) {
+    container.removeEventListener('pointermove', onPointerMove)
+    container.removeEventListener('pointerdown', onPointerDown)
+    container.removeEventListener('wheel', onWheel)
+    container.removeEventListener('touchstart', onTouchStart)
+    container.removeEventListener('touchmove', onTouchMove)
+  }
   cancelAnimationFrame(animationId)
   if (renderer) { renderer.forceContextLoss(); renderer.domElement.remove(); renderer = null }
   meshes.forEach(m => {
@@ -335,22 +397,33 @@ function focusIndex(i) {
   // move camera center a bit to emphasize
   const worldPos = new THREE.Vector3()
   m.getWorldPosition(worldPos)
-  const desired = new THREE.Vector3(worldPos.x - 120, worldPos.y + 80, camera.position.z)
+  const desired = new THREE.Vector3(worldPos.x + 120, worldPos.y + 60, camera.position.z)
   camera.position.lerp(desired, 0.18)
 }
 
-// Scroll-driven camera mapping — move camera parallel to stackGroup base axis
-function onScroll() {
-  if (!wrapper.value) return
-  const docH = document.documentElement.scrollHeight - window.innerHeight
-  const t = docH > 0 ? window.scrollY / docH : 0
-  const maxIndex = Math.max(1, meshes.length - 1)
-  const targetIndex = t * maxIndex
-  const idx = targetIndex
-  const pos = computePosition(idx)
-  const desired = new THREE.Vector3(pos.x - 120, pos.y + 80, camera.position.z)
-  camera.position.lerp(desired, 0.08)
-  camera.lookAt(new THREE.Vector3(pos.x, pos.y, pos.z))
+// Wheel/touch driven depth — adjust local Z without moving camera or page
+function applyScrollDepth() {
+  for (const m of meshes) {
+    if (m !== lastIntersect) m.userData.targetZ = m.userData.baseZ + scrollDepth
+  }
+}
+function onWheel(e) {
+  e.preventDefault()
+  scrollDepth = clamp(scrollDepth + e.deltaY * SCROLL_SPEED, SCROLL_MIN, SCROLL_MAX)
+  applyScrollDepth()
+}
+let touchY = 0
+function onTouchStart(e) { if (e.touches && e.touches.length) touchY = e.touches[0].clientY }
+function onTouchMove(e) {
+  if (!(e.touches && e.touches.length)) return
+  const y = e.touches[0].clientY
+  const dy = touchY - y
+  if (Math.abs(dy) > 0) {
+    e.preventDefault()
+    touchY = y
+    scrollDepth = clamp(scrollDepth + dy * (SCROLL_SPEED * 0.8), SCROLL_MIN, SCROLL_MAX)
+    applyScrollDepth()
+  }
 }
 
 // Animate loop: lerp transforms
@@ -372,6 +445,7 @@ function animate() {
 onMounted(() => {
   if (typeof window === 'undefined') return
   try { initScene() } catch (err) { console.error('Three init failed', err); showFallback.value = true }
+  applyScrollDepth()
 })
 onBeforeUnmount(() => { disposeScene() })
 
