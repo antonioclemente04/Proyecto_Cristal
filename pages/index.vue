@@ -8,7 +8,7 @@
           href="javascript:void(0)"
           class="text-white text-xl font-light hover:underline transition-all duration-300 cursor-pointer"
         >
-          Salir
+          Ni de coña, friki.
         </a>
       </div>
 
@@ -46,7 +46,7 @@
           href="javascript:void(0)"
           class="text-white text-xl font-light hover:underline transition-all duration-300 cursor-pointer"
         >
-          Continuar
+          Supongo...
         </a>
       </div>
     </div>
@@ -61,11 +61,12 @@ const router = useRouter()
 
 // Diálogos de la mascota
 const dialogs = [
-  "¡Hola! Bienvenido a nuestra página web. Soy tu guía virtual y estoy aquí para ayudarte.",
-  "Esta es una plataforma increíble donde podrás descubrir muchas cosas interesantes.",
-  "Hemos preparado todo con mucho cariño para que tengas la mejor experiencia posible.",
-  "Navegar por aquí es muy sencillo, y yo estaré aquí si necesitas ayuda en cualquier momento.",
-  "¿Estás listo para comenzar esta aventura? ¡Vamos a explorar juntos!"
+  "Hola, cacho-carne",
+  "Soy tu guia virtual",
+  "Sí, una cerveza",
+  "Ire cambiando de forma a traves de tu viaje",
+  "Voy a enseñarte movidas sobre el vidrio a través del tiempo",
+  "Suena genial ¿Eh?",
 ]
 
 const currentDialogIndex = ref(0)
