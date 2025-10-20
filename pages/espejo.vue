@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-black flex items-center justify-center p-4">
+  <div class="min-h-screen bg-black flex items-center justify-center p-4 select-none">
     <!-- Fase de introducción -->
     <div v-if="!showGlass" @click="nextMessage" class="w-full" :class="{ 'cursor-pointer': !isLastMessage }">
       <div class="max-w-6xl w-full mx-auto flex flex-col items-center justify-center">
@@ -8,7 +8,8 @@
           <img 
             src="/images/espejo.png" 
             alt="Mascota" 
-            class="w-64 h-64 object-contain"
+            class="w-64 h-64 object-contain select-none"
+            draggable="false"
           />
         </div>
 
@@ -34,7 +35,8 @@
         <img 
           src="/images/espejo.png" 
           alt="Mascota" 
-          class="w-24 h-24 object-contain floating"
+          class="w-24 h-24 object-contain floating select-none"
+          draggable="false"
         />
         <div class="speech-bubble">
           {{ currentMessage }}
@@ -59,14 +61,14 @@
       <div class="glass-wrapper" :class="{ 'mobile-view': isMobileView }">
         <div ref="glass" class="glass">
           <div class="camera-container">
-            <video ref="videoRef" autoplay playsinline class="camera-feed"></video>
-            <img v-if="isMobileView" src="/images/Instagram.png" alt="Instagram Overlay" class="instagram-overlay" />
+            <video ref="videoRef" autoplay playsinline class="camera-feed select-none" draggable="false"></video>
+            <img v-if="isMobileView" src="/images/Instagram.png" alt="Instagram Overlay" class="instagram-overlay select-none" draggable="false" />
+            <img v-if="!isMobileView" src="/images/marco_espejo.png" alt="Marco del espejo" class="frame-overlay select-none" draggable="false" />
           </div>
-          <img v-if="!isMobileView" src="/images/marco_espejo.png" alt="Marco del espejo" class="frame-overlay" />
         </div>
       </div>
       
-      <div class="instructions">
+      <div class="instructions select-none">
         Mueve el ratón para ver el efecto de refracción
       </div>
     </div>
@@ -101,6 +103,8 @@ const showMascot = ref(false)
 const currentPhase = ref('intro') // 'intro' or 'reflection'
 const isMobileView = ref(false) // Control for smartphone view
 const showGlassContent = ref(false) // Control para mostrar el contenido del espejo
+const isBroken = ref(false) // Control para el efecto de rotura
+const fragments = ref([]) // Almacenará los fragmentos de la cámara
 
 // Asegurarse de que estamos en el estado inicial
 onMounted(() => {
@@ -150,12 +154,18 @@ const nextMessage = async () => {
   else if (currentPhase.value === 'reflection') {
     // Si es el último mensaje de reflexión, activar el modo móvil
     if (currentMessageIndex.value >= reflectionMessages.length - 1) {
-      console.log('Activando modo móvil...')
-      isMobileView.value = true
-      
-      // Iniciar la cámara si no está activa
-      if (!stream) {
-        await startCamera()
+      if (!isMobileView.value) {
+        console.log('Activando modo móvil...')
+        isMobileView.value = true
+        
+        // Iniciar la cámara si no está activa
+        if (!stream) {
+          await startCamera()
+        }
+      } else if (!isBroken.value) {
+        // Si ya estamos en modo móvil y no se ha roto, romper la cámara
+        breakCamera()
+        isBroken.value = true
       }
       return
     }
@@ -279,6 +289,114 @@ const initGlassEffect = async () => {
   });
 };
 
+// Función para romper la cámara en fragmentos
+const breakCamera = () => {
+  if (!videoRef.value) return;
+  
+  const container = document.querySelector('.camera-container');
+  if (!container) return;
+  
+  // Ocultar el video original
+  videoRef.value.style.display = 'none';
+  
+  // Crear un canvas para capturar el fotograma actual del video
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = videoRef.value.videoWidth;
+  canvas.height = videoRef.value.videoHeight;
+  ctx.drawImage(videoRef.value, 0, 0, canvas.width, canvas.height);
+  
+  // Tamaño de los fragmentos
+  const fragmentSize = 100;
+  const cols = Math.ceil(canvas.width / fragmentSize);
+  const rows = Math.ceil(canvas.height / fragmentSize);
+  
+  // Crear fragmentos
+  for (let y = 0; y < rows; y++) {
+    for (let x = 0; x < cols; x++) {
+      // Crear un nuevo canvas para cada fragmento
+      const fragmentCanvas = document.createElement('canvas');
+      fragmentCanvas.width = fragmentSize;
+      fragmentCanvas.height = fragmentSize;
+      const fragmentCtx = fragmentCanvas.getContext('2d');
+      
+      // Extraer la porción de la imagen
+      fragmentCtx.drawImage(
+        canvas,
+        x * fragmentSize, y * fragmentSize, fragmentSize, fragmentSize,
+        0, 0, fragmentSize, fragmentSize
+      );
+      
+      // Crear el elemento del fragmento
+      const fragment = document.createElement('div');
+      fragment.className = 'fragment';
+      fragment.style.width = `${fragmentSize}px`;
+      fragment.style.height = `${fragmentSize}px`;
+      fragment.style.backgroundImage = `url(${fragmentCanvas.toDataURL()})`;
+      fragment.style.backgroundSize = `${canvas.width}px ${canvas.height}px`;
+      fragment.style.backgroundPosition = `-${x * fragmentSize}px -${y * fragmentSize}px`;
+      fragment.style.position = 'absolute';
+      fragment.style.left = `${x * fragmentSize}px`;
+      fragment.style.top = `${y * fragmentSize}px`;
+      
+      // Hacer el fragmento arrastrable
+      makeDraggable(fragment);
+      
+      // Añadir al DOM
+      container.appendChild(fragment);
+      
+      // Animar la caída del fragmento
+      const angle = Math.random() * Math.PI * 2;
+      const distance = 50 + Math.random() * 100;
+      const duration = 0.5 + Math.random() * 1;
+      
+      gsap.to(fragment, {
+        x: Math.cos(angle) * distance,
+        y: Math.sin(angle) * distance,
+        rotation: (Math.random() - 0.5) * 360,
+        duration: duration,
+        ease: 'power2.out'
+      });
+    }
+  }
+};
+
+// Hacer un elemento arrastrable
+const makeDraggable = (element) => {
+  let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+  
+  element.onmousedown = dragMouseDown;
+  
+  function dragMouseDown(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // Obtener la posición del ratón al inicio del arrastre
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    document.onmouseup = closeDragElement;
+    document.onmousemove = elementDrag;
+  }
+  
+  function elementDrag(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // Calcular la nueva posición
+    pos1 = pos3 - e.clientX;
+    pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    // Establecer la nueva posición del elemento
+    element.style.top = (element.offsetTop - pos2) + "px";
+    element.style.left = (element.offsetLeft - pos1) + "px";
+  }
+  
+  function closeDragElement() {
+    // Detener el movimiento al soltar el botón del ratón
+    document.onmouseup = null;
+    document.onmousemove = null;
+  }
+};
+
 // Limpieza al desmontar
 onBeforeUnmount(() => {
   stopCamera();
@@ -290,6 +408,25 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
+/* Deshabilitar selección de texto en toda la aplicación */
+* {
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Estándar */
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Permitir selección solo en elementos de entrada de texto */
+input,
+textarea,
+[contenteditable] {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
 .espejo-page {
   min-height: 100vh;
   display: flex;
