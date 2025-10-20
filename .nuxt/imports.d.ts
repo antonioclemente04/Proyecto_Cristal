@@ -28,4 +28,7 @@ export { withCtx, withDirectives, withKeys, withMemo, withModifiers, withScopeId
 export { requestIdleCallback, cancelIdleCallback } from '#app/compat/idle-callback';
 export { setInterval } from '#app/compat/interval';
 export { defineLazyHydrationComponent } from '#app/composables/lazy-hydration';
+export { useCameraManager, useGraph, useLoader, useLoop, useRendererManager, useTres, useTresContext, useTresContextProvider, extend as extendTres, TresObject } from '@tresjs/core';
+export { extractBindingPosition, hasSetter, pick, useAnimations, useEnvironment, useFBO, useFBX, useGLTF, useGLTFExporter, useIntersect, useMask, useProgress, useSVG, useSurfaceSampler, useTexture, useTextures, useVideoTexture } from '@tresjs/cientos';
+export { useEffect, useEffectPmndrs } from '@tresjs/post-processing';
 export { useNuxtDevTools } from '../node_modules/@nuxt/devtools/dist/runtime/use-nuxt-devtools';

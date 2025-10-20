@@ -24,12 +24,15 @@ declare global {
   const definePayloadReviver: typeof import('../../node_modules/nuxt/dist/app/composables/payload').definePayloadReviver
   const effect: typeof import('vue').effect
   const effectScope: typeof import('vue').effectScope
+  const extendTres: typeof import('../../node_modules/@tresjs/core').extend
+  const extractBindingPosition: typeof import('@tresjs/cientos').extractBindingPosition
   const getAppManifest: typeof import('../../node_modules/nuxt/dist/app/composables/manifest').getAppManifest
   const getCurrentInstance: typeof import('vue').getCurrentInstance
   const getCurrentScope: typeof import('vue').getCurrentScope
   const getRouteRules: typeof import('../../node_modules/nuxt/dist/app/composables/manifest').getRouteRules
   const h: typeof import('vue').h
   const hasInjectionContext: typeof import('vue').hasInjectionContext
+  const hasSetter: typeof import('@tresjs/cientos').hasSetter
   const inject: typeof import('vue').inject
   const injectHead: typeof import('../../node_modules/nuxt/dist/app/composables/head').injectHead
   const isNuxtError: typeof import('../../node_modules/nuxt/dist/app/composables/error').isNuxtError
@@ -64,6 +67,7 @@ declare global {
   const onUnmounted: typeof import('vue').onUnmounted
   const onUpdated: typeof import('vue').onUpdated
   const onWatcherCleanup: typeof import('vue').onWatcherCleanup
+  const pick: typeof import('@tresjs/cientos').pick
   const prefetchComponents: typeof import('../../node_modules/nuxt/dist/app/composables/preload').prefetchComponents
   const preloadComponents: typeof import('../../node_modules/nuxt/dist/app/composables/preload').preloadComponents
   const preloadPayload: typeof import('../../node_modules/nuxt/dist/app/composables/payload').preloadPayload
@@ -94,26 +98,42 @@ declare global {
   const tryUseNuxtApp: typeof import('../../node_modules/nuxt/dist/app/nuxt').tryUseNuxtApp
   const unref: typeof import('vue').unref
   const updateAppConfig: typeof import('../../node_modules/nuxt/dist/app/config').updateAppConfig
+  const useAnimations: typeof import('@tresjs/cientos').useAnimations
   const useAppConfig: typeof import('../../node_modules/nuxt/dist/app/config').useAppConfig
   const useAsyncData: typeof import('../../node_modules/nuxt/dist/app/composables/asyncData').useAsyncData
   const useAttrs: typeof import('vue').useAttrs
+  const useCameraManager: typeof import('../../node_modules/@tresjs/core').useCameraManager
   const useCookie: typeof import('../../node_modules/nuxt/dist/app/composables/cookie').useCookie
   const useCssModule: typeof import('vue').useCssModule
   const useCssVars: typeof import('vue').useCssVars
+  const useEffect: typeof import('@tresjs/post-processing').useEffect
+  const useEffectPmndrs: typeof import('@tresjs/post-processing').useEffectPmndrs
+  const useEnvironment: typeof import('@tresjs/cientos').useEnvironment
   const useError: typeof import('../../node_modules/nuxt/dist/app/composables/error').useError
+  const useFBO: typeof import('@tresjs/cientos').useFBO
+  const useFBX: typeof import('@tresjs/cientos').useFBX
   const useFetch: typeof import('../../node_modules/nuxt/dist/app/composables/fetch').useFetch
+  const useGLTF: typeof import('@tresjs/cientos').useGLTF
+  const useGLTFExporter: typeof import('@tresjs/cientos').useGLTFExporter
+  const useGraph: typeof import('../../node_modules/@tresjs/core').useGraph
   const useHead: typeof import('../../node_modules/nuxt/dist/app/composables/head').useHead
   const useHeadSafe: typeof import('../../node_modules/nuxt/dist/app/composables/head').useHeadSafe
   const useHydration: typeof import('../../node_modules/nuxt/dist/app/composables/hydrate').useHydration
   const useId: typeof import('vue').useId
+  const useIntersect: typeof import('@tresjs/cientos').useIntersect
   const useLazyAsyncData: typeof import('../../node_modules/nuxt/dist/app/composables/asyncData').useLazyAsyncData
   const useLazyFetch: typeof import('../../node_modules/nuxt/dist/app/composables/fetch').useLazyFetch
+  const useLoader: typeof import('../../node_modules/@tresjs/core').useLoader
   const useLoadingIndicator: typeof import('../../node_modules/nuxt/dist/app/composables/loading-indicator').useLoadingIndicator
+  const useLoop: typeof import('../../node_modules/@tresjs/core').useLoop
+  const useMask: typeof import('@tresjs/cientos').useMask
   const useModel: typeof import('vue').useModel
   const useNuxtApp: typeof import('../../node_modules/nuxt/dist/app/nuxt').useNuxtApp
   const useNuxtData: typeof import('../../node_modules/nuxt/dist/app/composables/asyncData').useNuxtData
   const useNuxtDevTools: typeof import('../../node_modules/@nuxt/devtools/dist/runtime/use-nuxt-devtools').useNuxtDevTools
   const usePreviewMode: typeof import('../../node_modules/nuxt/dist/app/composables/preview').usePreviewMode
+  const useProgress: typeof import('@tresjs/cientos').useProgress
+  const useRendererManager: typeof import('../../node_modules/@tresjs/core').useRendererManager
   const useRequestEvent: typeof import('../../node_modules/nuxt/dist/app/composables/ssr').useRequestEvent
   const useRequestFetch: typeof import('../../node_modules/nuxt/dist/app/composables/ssr').useRequestFetch
   const useRequestHeader: typeof import('../../node_modules/nuxt/dist/app/composables/ssr').useRequestHeader
@@ -125,6 +145,7 @@ declare global {
   const useRouter: typeof import('../../node_modules/nuxt/dist/app/composables/router').useRouter
   const useRuntimeConfig: typeof import('../../node_modules/nuxt/dist/app/nuxt').useRuntimeConfig
   const useRuntimeHook: typeof import('../../node_modules/nuxt/dist/app/composables/runtime-hook').useRuntimeHook
+  const useSVG: typeof import('@tresjs/cientos').useSVG
   const useScript: typeof import('../../node_modules/nuxt/dist/app/composables/script-stubs').useScript
   const useScriptClarity: typeof import('../../node_modules/nuxt/dist/app/composables/script-stubs').useScriptClarity
   const useScriptCloudflareWebAnalytics: typeof import('../../node_modules/nuxt/dist/app/composables/script-stubs').useScriptCloudflareWebAnalytics
@@ -162,8 +183,15 @@ declare global {
   const useShadowRoot: typeof import('vue').useShadowRoot
   const useSlots: typeof import('vue').useSlots
   const useState: typeof import('../../node_modules/nuxt/dist/app/composables/state').useState
+  const useSurfaceSampler: typeof import('@tresjs/cientos').useSurfaceSampler
   const useTemplateRef: typeof import('vue').useTemplateRef
+  const useTexture: typeof import('@tresjs/cientos').useTexture
+  const useTextures: typeof import('@tresjs/cientos').useTextures
   const useTransitionState: typeof import('vue').useTransitionState
+  const useTres: typeof import('../../node_modules/@tresjs/core').useTres
+  const useTresContext: typeof import('../../node_modules/@tresjs/core').useTresContext
+  const useTresContextProvider: typeof import('../../node_modules/@tresjs/core').useTresContextProvider
+  const useVideoTexture: typeof import('@tresjs/cientos').useVideoTexture
   const watch: typeof import('vue').watch
   const watchEffect: typeof import('vue').watchEffect
   const watchPostEffect: typeof import('vue').watchPostEffect
@@ -180,6 +208,9 @@ declare global {
   // @ts-ignore
   export type { Component, ComponentPublicInstance, ComputedRef, DirectiveBinding, ExtractDefaultPropTypes, ExtractPropTypes, ExtractPublicPropTypes, InjectionKey, PropType, Ref, MaybeRef, MaybeRefOrGetter, VNode, WritableComputedRef } from 'vue'
   import('vue')
+  // @ts-ignore
+  export type { TresObject } from '../../node_modules/@tresjs/core'
+  import('../../node_modules/@tresjs/core')
 }
 // for vue template auto import
 import { UnwrapRef } from 'vue'
@@ -208,12 +239,15 @@ declare module 'vue' {
     readonly definePayloadReviver: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/payload')['definePayloadReviver']>
     readonly effect: UnwrapRef<typeof import('vue')['effect']>
     readonly effectScope: UnwrapRef<typeof import('vue')['effectScope']>
+    readonly extendTres: UnwrapRef<typeof import('../../node_modules/@tresjs/core')['extend']>
+    readonly extractBindingPosition: UnwrapRef<typeof import('@tresjs/cientos')['extractBindingPosition']>
     readonly getAppManifest: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/manifest')['getAppManifest']>
     readonly getCurrentInstance: UnwrapRef<typeof import('vue')['getCurrentInstance']>
     readonly getCurrentScope: UnwrapRef<typeof import('vue')['getCurrentScope']>
     readonly getRouteRules: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/manifest')['getRouteRules']>
     readonly h: UnwrapRef<typeof import('vue')['h']>
     readonly hasInjectionContext: UnwrapRef<typeof import('vue')['hasInjectionContext']>
+    readonly hasSetter: UnwrapRef<typeof import('@tresjs/cientos')['hasSetter']>
     readonly inject: UnwrapRef<typeof import('vue')['inject']>
     readonly injectHead: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/head')['injectHead']>
     readonly isNuxtError: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/error')['isNuxtError']>
@@ -248,6 +282,7 @@ declare module 'vue' {
     readonly onUnmounted: UnwrapRef<typeof import('vue')['onUnmounted']>
     readonly onUpdated: UnwrapRef<typeof import('vue')['onUpdated']>
     readonly onWatcherCleanup: UnwrapRef<typeof import('vue')['onWatcherCleanup']>
+    readonly pick: UnwrapRef<typeof import('@tresjs/cientos')['pick']>
     readonly prefetchComponents: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/preload')['prefetchComponents']>
     readonly preloadComponents: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/preload')['preloadComponents']>
     readonly preloadPayload: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/payload')['preloadPayload']>
@@ -278,26 +313,42 @@ declare module 'vue' {
     readonly tryUseNuxtApp: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/nuxt')['tryUseNuxtApp']>
     readonly unref: UnwrapRef<typeof import('vue')['unref']>
     readonly updateAppConfig: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/config')['updateAppConfig']>
+    readonly useAnimations: UnwrapRef<typeof import('@tresjs/cientos')['useAnimations']>
     readonly useAppConfig: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/config')['useAppConfig']>
     readonly useAsyncData: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/asyncData')['useAsyncData']>
     readonly useAttrs: UnwrapRef<typeof import('vue')['useAttrs']>
+    readonly useCameraManager: UnwrapRef<typeof import('../../node_modules/@tresjs/core')['useCameraManager']>
     readonly useCookie: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/cookie')['useCookie']>
     readonly useCssModule: UnwrapRef<typeof import('vue')['useCssModule']>
     readonly useCssVars: UnwrapRef<typeof import('vue')['useCssVars']>
+    readonly useEffect: UnwrapRef<typeof import('@tresjs/post-processing')['useEffect']>
+    readonly useEffectPmndrs: UnwrapRef<typeof import('@tresjs/post-processing')['useEffectPmndrs']>
+    readonly useEnvironment: UnwrapRef<typeof import('@tresjs/cientos')['useEnvironment']>
     readonly useError: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/error')['useError']>
+    readonly useFBO: UnwrapRef<typeof import('@tresjs/cientos')['useFBO']>
+    readonly useFBX: UnwrapRef<typeof import('@tresjs/cientos')['useFBX']>
     readonly useFetch: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/fetch')['useFetch']>
+    readonly useGLTF: UnwrapRef<typeof import('@tresjs/cientos')['useGLTF']>
+    readonly useGLTFExporter: UnwrapRef<typeof import('@tresjs/cientos')['useGLTFExporter']>
+    readonly useGraph: UnwrapRef<typeof import('../../node_modules/@tresjs/core')['useGraph']>
     readonly useHead: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/head')['useHead']>
     readonly useHeadSafe: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/head')['useHeadSafe']>
     readonly useHydration: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/hydrate')['useHydration']>
     readonly useId: UnwrapRef<typeof import('vue')['useId']>
+    readonly useIntersect: UnwrapRef<typeof import('@tresjs/cientos')['useIntersect']>
     readonly useLazyAsyncData: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/asyncData')['useLazyAsyncData']>
     readonly useLazyFetch: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/fetch')['useLazyFetch']>
+    readonly useLoader: UnwrapRef<typeof import('../../node_modules/@tresjs/core')['useLoader']>
     readonly useLoadingIndicator: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/loading-indicator')['useLoadingIndicator']>
+    readonly useLoop: UnwrapRef<typeof import('../../node_modules/@tresjs/core')['useLoop']>
+    readonly useMask: UnwrapRef<typeof import('@tresjs/cientos')['useMask']>
     readonly useModel: UnwrapRef<typeof import('vue')['useModel']>
     readonly useNuxtApp: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/nuxt')['useNuxtApp']>
     readonly useNuxtData: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/asyncData')['useNuxtData']>
     readonly useNuxtDevTools: UnwrapRef<typeof import('../../node_modules/@nuxt/devtools/dist/runtime/use-nuxt-devtools')['useNuxtDevTools']>
     readonly usePreviewMode: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/preview')['usePreviewMode']>
+    readonly useProgress: UnwrapRef<typeof import('@tresjs/cientos')['useProgress']>
+    readonly useRendererManager: UnwrapRef<typeof import('../../node_modules/@tresjs/core')['useRendererManager']>
     readonly useRequestEvent: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/ssr')['useRequestEvent']>
     readonly useRequestFetch: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/ssr')['useRequestFetch']>
     readonly useRequestHeader: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/ssr')['useRequestHeader']>
@@ -309,6 +360,7 @@ declare module 'vue' {
     readonly useRouter: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/router')['useRouter']>
     readonly useRuntimeConfig: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/nuxt')['useRuntimeConfig']>
     readonly useRuntimeHook: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/runtime-hook')['useRuntimeHook']>
+    readonly useSVG: UnwrapRef<typeof import('@tresjs/cientos')['useSVG']>
     readonly useScript: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/script-stubs')['useScript']>
     readonly useScriptClarity: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/script-stubs')['useScriptClarity']>
     readonly useScriptCloudflareWebAnalytics: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/script-stubs')['useScriptCloudflareWebAnalytics']>
@@ -346,8 +398,15 @@ declare module 'vue' {
     readonly useShadowRoot: UnwrapRef<typeof import('vue')['useShadowRoot']>
     readonly useSlots: UnwrapRef<typeof import('vue')['useSlots']>
     readonly useState: UnwrapRef<typeof import('../../node_modules/nuxt/dist/app/composables/state')['useState']>
+    readonly useSurfaceSampler: UnwrapRef<typeof import('@tresjs/cientos')['useSurfaceSampler']>
     readonly useTemplateRef: UnwrapRef<typeof import('vue')['useTemplateRef']>
+    readonly useTexture: UnwrapRef<typeof import('@tresjs/cientos')['useTexture']>
+    readonly useTextures: UnwrapRef<typeof import('@tresjs/cientos')['useTextures']>
     readonly useTransitionState: UnwrapRef<typeof import('vue')['useTransitionState']>
+    readonly useTres: UnwrapRef<typeof import('../../node_modules/@tresjs/core')['useTres']>
+    readonly useTresContext: UnwrapRef<typeof import('../../node_modules/@tresjs/core')['useTresContext']>
+    readonly useTresContextProvider: UnwrapRef<typeof import('../../node_modules/@tresjs/core')['useTresContextProvider']>
+    readonly useVideoTexture: UnwrapRef<typeof import('@tresjs/cientos')['useVideoTexture']>
     readonly watch: UnwrapRef<typeof import('vue')['watch']>
     readonly watchEffect: UnwrapRef<typeof import('vue')['watchEffect']>
     readonly watchPostEffect: UnwrapRef<typeof import('vue')['watchPostEffect']>
