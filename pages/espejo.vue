@@ -1,26 +1,24 @@
 <template>
   <div class="min-h-screen bg-black flex items-center justify-center p-4">
     <!-- Fase de introducción -->
-    <div v-if="!showGlass" @click="nextMessage" class="w-full">
+    <div v-if="!showGlass" @click="nextMessage" class="w-full" :class="{ 'cursor-pointer': !isLastMessage }">
       <div class="max-w-6xl w-full mx-auto flex flex-col items-center justify-center">
         <!-- Mascota con animación de flotación -->
         <div class="mb-8 floating">
           <img 
-            src="/images/serbepsa.png" 
+            src="/images/espejo.png" 
             alt="Mascota" 
             class="w-64 h-64 object-contain"
           />
         </div>
 
-        <!-- Cuadro de diálogo con animación -->
+        <!-- Cuadro de diálogo -->
         <div class="bg-white rounded-2xl shadow-2xl p-8 mb-8 relative max-w-2xl dialog-appear">
-          <!-- Flecha apuntando a la mascota -->
           <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-8 border-r-8 border-b-8 border-transparent border-b-white"></div>
           
           <div class="text-gray-800 text-lg leading-relaxed min-h-[120px]">
             <p class="mb-4 text-fade-in">{{ currentMessage }}</p>
             
-            <!-- Indicador de click si no es el último diálogo -->
             <div v-if="!isLastMessage" class="text-right text-sm text-gray-400 italic animate-pulse">
               Haz click para continuar...
             </div>
@@ -30,11 +28,11 @@
     </div>
 
     <!-- Fase del efecto de vidrio -->
-    <div v-else class="glass-container w-full h-full" @click="handleScreenClick">
+    <div v-if="showGlass" class="glass-container w-full h-full" @click="handleScreenClick">
       <!-- Mascota flotante -->
       <div v-if="showMascot" class="mascot-float">
         <img 
-          src="/images/serbepsa.png" 
+          src="/images/espejo.png" 
           alt="Mascota" 
           class="w-24 h-24 object-contain floating"
         />
@@ -49,20 +47,22 @@
       <div v-if="showLight" class="celestial-light"></div>
       
       <div class="decorative-elements">
-        <div v-for="(emoji, index) in emojis" 
-             :key="index" 
-             class="floating-emoji"
-             :style="getEmojiStyle(index)">
+        <div 
+          v-for="(emoji, index) in emojis" 
+          :key="index" 
+          class="floating-emoji"
+          :style="getEmojiStyle(index)">
           {{ emoji }}
         </div>
       </div>
       
-      <div class="glass-wrapper">
+      <div class="glass-wrapper" :class="{ 'mobile-view': isMobileView }">
         <div ref="glass" class="glass">
           <div class="camera-container">
             <video ref="videoRef" autoplay playsinline class="camera-feed"></video>
+            <img v-if="isMobileView" src="/images/Instagram.png" alt="Instagram Overlay" class="instagram-overlay" />
           </div>
-          <img src="/images/marco_espejo.png" alt="Marco del espejo" class="frame-overlay" />
+          <img v-if="!isMobileView" src="/images/marco_espejo.png" alt="Marco del espejo" class="frame-overlay" />
         </div>
       </div>
       
@@ -74,7 +74,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, computed, nextTick, onBeforeUnmount } from 'vue'
+import { ref, computed, onBeforeUnmount } from 'vue'
 import VanillaTilt from 'vanilla-tilt'
 import { gsap } from 'gsap'
 
@@ -99,6 +99,18 @@ const showGlass = ref(false)
 const showLight = ref(false)
 const showMascot = ref(false)
 const currentPhase = ref('intro') // 'intro' or 'reflection'
+const isMobileView = ref(false) // Control for smartphone view
+const showGlassContent = ref(false) // Control para mostrar el contenido del espejo
+
+// Asegurarse de que estamos en el estado inicial
+onMounted(() => {
+  currentMessageIndex.value = 0
+  showGlass.value = false
+  showLight.value = false
+  showMascot.value = false
+  currentPhase.value = 'intro'
+  isMobileView.value = false
+})
 
 const messages = computed(() => {
   return currentPhase.value === 'intro' ? introMessages : reflectionMessages
@@ -107,82 +119,98 @@ const messages = computed(() => {
 const currentMessage = computed(() => messages.value[currentMessageIndex.value])
 const isLastMessage = computed(() => currentMessageIndex.value === messages.value.length - 1)
 
-const handleScreenClick = () => {
+const handleScreenClick = async () => {
+  // Si ya estamos en modo móvil, permitir clics para avanzar mensajes
+  if (isMobileView.value) {
+    await nextMessage()
+    return
+  }
+  
   if (!showGlass.value) {
     // Si estamos en la fase de introducción
     nextMessage()
   } else if (showMascot.value) {
-    // Si estamos en la fase de reflexión
-    if (currentMessageIndex.value < messages.value.length - 1) {
-      currentMessageIndex.value++
-    } else {
-      // Opcional: reiniciar los mensajes o hacer otra acción
-      // currentMessageIndex.value = 0
+    // Si estamos en la fase de reflexión, usar nextMessage para manejar la lógica
+    await nextMessage()
+  }
+}
+
+const nextMessage = async () => {
+  // Si estamos en la fase de introducción
+  if (currentPhase.value === 'intro') {
+    // Si es el último mensaje de la fase de introducción, iniciar efecto de vidrio
+    if (currentMessageIndex.value >= introMessages.length - 1) {
+      startGlassEffect()
+      return
     }
-  }
-}
-
-const nextMessage = () => {
-  if (currentMessageIndex.value < messages.value.length - 1) {
+    // Incrementar el índice del mensaje
     currentMessageIndex.value++
-  } else {
-    startGlassEffect()
+  } 
+  // Si estamos en la fase de reflexión
+  else if (currentPhase.value === 'reflection') {
+    // Si es el último mensaje de reflexión, activar el modo móvil
+    if (currentMessageIndex.value >= reflectionMessages.length - 1) {
+      console.log('Activando modo móvil...')
+      isMobileView.value = true
+      
+      // Iniciar la cámara si no está activa
+      if (!stream) {
+        await startCamera()
+      }
+      return
+    }
+    // Incrementar el índice del mensaje
+    currentMessageIndex.value++
   }
 }
 
-const startReflectionPhase = () => {
+const startReflectionPhase = async () => {
   currentPhase.value = 'reflection'
   currentMessageIndex.value = 0
   showMascot.value = true
+  isMobileView.value = false
 }
 
 const startGlassEffect = async () => {
-  if (currentMessageIndex.value < messages.value.length - 1) {
-    nextMessage()
-  } else if (currentPhase.value === 'intro') {
-    showGlass.value = true
-    showLight.value = true
-    await nextTick()
-    initGlassEffect()
-    // Ocultar la luz celestial después de 1.5 segundos
-    setTimeout(() => {
-      showLight.value = false
-      startReflectionPhase()
-    }, 1500)
-  } else {
-    // Continuar con los mensajes de reflexión
-    if (currentMessageIndex.value < messages.value.length - 1) {
-      currentMessageIndex.value++
-    }
-  }
+  showGlass.value = true
+  showLight.value = true
+  
+  await new Promise(resolve => setTimeout(resolve, 100))
+  initGlassEffect()
+  
+  setTimeout(() => {
+    showLight.value = false
+    startReflectionPhase()
+  }, 1500)
 }
 
-// Sistema de efectos de vidrio
+// Referencias del DOM y estado de la cámara
 const glass = ref(null)
 const videoRef = ref(null)
 let stream = null
 
-
 // Iniciar la cámara
 const startCamera = async () => {
+  if (stream) return;
+  
   try {
     stream = await navigator.mediaDevices.getUserMedia({
       video: {
         facingMode: 'user',
-        width: { ideal: 1920 },
-        height: { ideal: 1080 },
-        frameRate: { ideal: 60 },
-        resizeMode: 'crop-and-scale'
+        width: { ideal: 1280 },
+        height: { ideal: 720 },
+        frameRate: { ideal: 30 },
+        resizeMode: 'cover'
       },
       audio: false
     });
     
     if (videoRef.value) {
       videoRef.value.srcObject = stream;
+      videoRef.value.play().catch(console.error);
     }
   } catch (err) {
     console.error('Error al acceder a la cámara:', err);
-    // Mostrar imagen de respaldo si la cámara falla
     if (glass.value) {
       glass.value.style.backgroundImage = 'url(https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80)';
     }
@@ -198,78 +226,64 @@ const stopCamera = () => {
   }
 };
 
-// Función para actualizar la posición de la cámara basada en la inclinación
 const updateCameraPosition = (tiltX, tiltY) => {
   if (!videoRef.value) return;
-  
-  // Calcular el desplazamiento basado en la inclinación
-  const moveX = (tiltX / 15) * 10; // Ajustar el rango de movimiento
+  const moveX = (tiltX / 15) * 10;
   const moveY = (tiltY / 15) * 10;
-  
-  // Aplicar el desplazamiento
   videoRef.value.style.transform = `scaleX(-1) translate(${moveX}%, ${moveY}%)`;
 };
 
 const initGlassEffect = async () => {
-  if (glass.value) {
-    // Iniciar la cámara
-    await startCamera();
-    
-    // Configuración del efecto de inclinación
-    const tilt = VanillaTilt.init(glass.value, {
-      max: 15,
-      speed: 400,
-      glare: true,
-      'max-glare': 0.2,
-      gyroscope: true,
-      scale: 1.05,
-      'glare-prerender': false,
-      onMove: (event, values) => {
-        updateCameraPosition(values.tiltX, values.tiltY);
-      }
-    });
-    
-    // Desactivar el efecto de movimiento del ratón ya que usamos la cámara en tiempo real
-    
-    // Asegurarse de que el efecto de inclinación se actualice correctamente
-    window.addEventListener('resize', () => {
-      if (glass.value && glass.value.vanillaTilt) {
-        glass.value.vanillaTilt.destroy()
-        VanillaTilt.init(glass.value, {
-          max: 15,
-          speed: 400,
-          glare: true,
-          'max-glare': 0.3,
-          gyroscope: true,
-          scale: 1.05
-        })
-      }
-    })
-  }
+  if (!glass.value) return;
   
-  // Animación de entrada del vidrio
+  await startCamera();
+  
+  const tilt = VanillaTilt.init(glass.value, {
+    max: 15,
+    speed: 400,
+    glare: true,
+    'max-glare': 0.2,
+    gyroscope: true,
+    scale: 1.05,
+    'glare-prerender': false,
+    onMove: (event, values) => updateCameraPosition(values.tiltX, values.tiltY)
+  });
+  
+  window.addEventListener('resize', () => {
+    if (glass.value?.vanillaTilt) {
+      glass.value.vanillaTilt.destroy();
+      VanillaTilt.init(glass.value, {
+        max: 15,
+        speed: 400,
+        glare: true,
+        'max-glare': 0.3,
+        gyroscope: true,
+        scale: 1.05
+      });
+    }
+  });
+  
   gsap.from('.glass', {
     scale: 0.5,
     opacity: 0,
     duration: 1,
     ease: 'back.out(1.7)'
-  })
+  });
   
-  // Animación de los emojis
   gsap.to('.floating-emoji', {
     y: '+=20',
     yoyo: true,
     repeat: -1,
     ease: 'sine.inOut',
     duration: () => 2 + Math.random() * 3
-  })
-}
+  });
+};
 
 // Limpieza al desmontar
 onBeforeUnmount(() => {
   stopCamera();
   
-  if (glass.value && glass.value.vanillaTilt) {
+  if (glass.value?.vanillaTilt) {
     glass.value.vanillaTilt.destroy();
   }
 })
@@ -406,15 +420,59 @@ onBeforeUnmount(() => {
 
 .glass-wrapper {
   position: relative;
-  width: 800px;  /* Aumentado a 800px de ancho */
-  height: 500px;  /* Altura ajustada para mantener proporción */
+  width: 800px;
+  height: 500px;
   z-index: 10;
   transform-style: preserve-3d;
   perspective: 1000px;
-  margin: 2rem auto;  /* Añadido margen superior e inferior */
+  margin: 2rem auto;
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center center;
+  will-change: transform, width, height, border-radius;
+}
+
+/* Smartphone view */
+.glass-wrapper.mobile-view {
+  width: 320px;
+  height: 600px;
+  border-radius: 30px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  border: 12px solid #222;
+  position: relative;
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Home indicator for smartphone */
+.glass-wrapper.mobile-view::after {
+  content: '';
+  position: absolute;
+  width: 120px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.3);
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 4px;
+}
+
+.instagram-overlay {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 100%;
+  width: auto;
+  max-width: none;
+  object-fit: cover;
+  pointer-events: none;
+  z-index: 10;
 }
 
 .glass {
@@ -435,6 +493,9 @@ onBeforeUnmount(() => {
   position: relative;
   overflow: hidden;
   border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .glass .camera-feed {
@@ -507,39 +568,6 @@ onBeforeUnmount(() => {
   }
 }
 
-/* Elementos decorativos */
-.decorative-elements {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
-.floating-emoji {
-  position: absolute;
-  font-size: var(--size, 40px);
-  user-select: none;
-  animation: 
-    float-vertical var(--duration, 3s) ease-in-out infinite,
-    float-horizontal calc(var(--duration, 3s) * 1.5) ease-in-out infinite;
-  filter: drop-shadow(0 0 10px currentColor);
-  opacity: 0;
-  animation-fill-mode: both;
-  animation-delay: var(--delay, 0s);
-}
-
-.instructions {
-  position: absolute;
-  bottom: 2rem;
-  left: 0;
-  right: 0;
-  text-align: center;
-  color: rgba(255, 255, 255, 0.7);
-  font-style: italic;
-  animation: fadeIn 1s ease-out 1s both;
-}
 
 /* Animaciones */
 @keyframes float {

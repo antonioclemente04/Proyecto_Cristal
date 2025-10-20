@@ -1,10 +1,21 @@
 <template>
   <div class="min-h-screen bg-black flex items-center justify-center p-4" @click="nextDialog">
+    <!-- Link Saltar introducción (arriba a la derecha) -->
+    <div class="absolute top-6 right-6">
+      <a 
+        @click.stop="skipIntro"
+        href="javascript:void(0)"
+        class="text-white/70 hover:text-white text-sm font-medium transition-colors duration-200"
+      >
+        Saltar introducción →
+      </a>
+    </div>
+    
     <div class="max-w-6xl w-full flex items-center justify-center gap-12">
       <!-- Link Salir (izquierda) -->
       <div v-if="isLastDialog" class="flex-shrink-0">
         <a 
-          @click.prevent="exitPage"
+          @click.stop="exitPage"
           href="javascript:void(0)"
           class="text-white text-xl font-light hover:underline transition-all duration-300 cursor-pointer"
         >
@@ -89,6 +100,12 @@ const nextDialog = () => {
 // Ir al home
 const goToIndex = () => {
   router.push('/home')
+}
+
+// Ir directamente al espejo, saltándonos la introducción
+const skipIntro = (e) => {
+  e?.stopPropagation()
+  router.push('/espejo')
 }
 
 // Salir de la página
