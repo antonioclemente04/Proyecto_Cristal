@@ -1,1 +1,1 @@
-export { default } from "file:///C:/Users/Anto%C3%B1o/CascadeProjects/windsurf-project/nuxt-app/node_modules/@nuxt/vite-builder/dist/runtime/client.manifest.mjs"
+export { default } from "file:///C:/Users/Anto%C3%B1o/Desktop/Proyecto_Cristal-main/Proyecto_Cristal-main/node_modules/@nuxt/vite-builder/dist/runtime/client.manifest.mjs"

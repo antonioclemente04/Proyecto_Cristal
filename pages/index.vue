@@ -1,9 +1,161 @@
 <template>
-  <div class="container mx-auto p-4">
-    <h1 class="text-2xl font-bold">Bienvenido a mi proyecto</h1>
-    <p>Empieza a construir tu aplicación aquí.</p>
-    <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded">
-      Yo me lo compraría
-    </button>
+  <div class="min-h-screen bg-black flex items-center justify-center p-4" @click="nextDialog">
+    <div class="max-w-6xl w-full flex items-center justify-center gap-12">
+      <!-- Link Salir (izquierda) -->
+      <div v-if="isLastDialog" class="flex-shrink-0">
+        <a 
+          @click.prevent="exitPage"
+          href="javascript:void(0)"
+          class="text-white text-xl font-light hover:underline transition-all duration-300 cursor-pointer"
+        >
+          Salir
+        </a>
+      </div>
+
+      <!-- Contenedor central -->
+      <div class="flex flex-col items-center">
+        <!-- Mascota con animación de flotación -->
+        <div class="mb-8 floating">
+          <img 
+            src="/images/serbepsa.png" 
+            alt="Mascota" 
+            class="w-64 h-64 object-contain"
+          />
+        </div>
+
+        <!-- Cuadro de diálogo con animación -->
+        <div class="bg-white rounded-2xl shadow-2xl p-8 mb-8 relative max-w-2xl dialog-appear">
+          <!-- Flecha apuntando a la mascota -->
+          <div class="absolute -top-4 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-8 border-r-8 border-b-8 border-transparent border-b-white"></div>
+          
+          <div class="text-gray-800 text-lg leading-relaxed min-h-[120px]">
+            <p class="mb-4 text-fade-in">{{ currentDialogText }}</p>
+            
+            <!-- Indicador de click si no es el último diálogo -->
+            <div v-if="!isLastDialog" class="text-right text-sm text-gray-400 italic animate-pulse">
+              Haz click para continuar...
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Link Continuar (derecha) -->
+      <div v-if="isLastDialog" class="flex-shrink-0">
+        <a 
+          @click.prevent="goToIndex"
+          href="javascript:void(0)"
+          class="text-white text-xl font-light hover:underline transition-all duration-300 cursor-pointer"
+        >
+          Continuar
+        </a>
+      </div>
+    </div>
   </div>
 </template>
+
+<script setup>
+import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+// Diálogos de la mascota
+const dialogs = [
+  "¡Hola! Bienvenido a nuestra página web. Soy tu guía virtual y estoy aquí para ayudarte.",
+  "Esta es una plataforma increíble donde podrás descubrir muchas cosas interesantes.",
+  "Hemos preparado todo con mucho cariño para que tengas la mejor experiencia posible.",
+  "Navegar por aquí es muy sencillo, y yo estaré aquí si necesitas ayuda en cualquier momento.",
+  "¿Estás listo para comenzar esta aventura? ¡Vamos a explorar juntos!"
+]
+
+const currentDialogIndex = ref(0)
+
+const currentDialogText = computed(() => {
+  return dialogs[currentDialogIndex.value]
+})
+
+const isLastDialog = computed(() => {
+  return currentDialogIndex.value === dialogs.length - 1
+})
+
+// Avanzar al siguiente diálogo
+const nextDialog = () => {
+  if (currentDialogIndex.value < dialogs.length - 1) {
+    currentDialogIndex.value++
+  }
+}
+
+// Ir al home
+const goToIndex = () => {
+  router.push('/home')
+}
+
+// Salir de la página
+const exitPage = () => {
+  window.close()
+  // Si window.close() no funciona (navegadores modernos lo bloquean), redirigir a una página en blanco
+  setTimeout(() => {
+    window.location.href = 'about:blank'
+  }, 100)
+}
+</script>
+
+<style scoped>
+/* Animación de flotación para la mascota */
+@keyframes floating {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.floating {
+  animation: floating 3s ease-in-out infinite;
+}
+
+/* Animación de aparición del diálogo */
+@keyframes dialogAppear {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.dialog-appear {
+  animation: dialogAppear 0.4s ease-out;
+}
+
+/* Animación de fade-in para el texto */
+@keyframes textFadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.text-fade-in {
+  animation: textFadeIn 0.6s ease-in;
+}
+
+/* Animación de pulso para el indicador */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+</style>
