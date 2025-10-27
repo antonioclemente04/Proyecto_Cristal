@@ -1,0 +1,1 @@
+export { default } from "file:///C:/Users/Anto%C3%B1o/Desktop/Nueva%20carpeta%20(2)/Cristal_Final/node_modules/@nuxt/vite-builder/dist/runtime/client.manifest.mjs"
