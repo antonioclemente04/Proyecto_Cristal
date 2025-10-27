@@ -153,7 +153,7 @@ interface _GlobalComponents {
   'VignettePmndrs': typeof import("@tresjs/post-processing")['VignettePmndrs']
   'TresCanvas': typeof import("../../node_modules/@tresjs/nuxt/dist/runtime/TresCanvas.client.vue")['default']
   'TresCanvas': typeof import("../../node_modules/@tresjs/nuxt/dist/runtime/TresCanvas.server.vue")['default']
-  'NuxtPage': typeof import("../../node_modules/nuxt/dist/pages/runtime/page-placeholder")['default']
+  'NuxtPage': typeof import("../../node_modules/nuxt/dist/pages/runtime/page")['default']
   'NoScript': typeof import("../../node_modules/nuxt/dist/head/runtime/components")['NoScript']
   'Link': typeof import("../../node_modules/nuxt/dist/head/runtime/components")['Link']
   'Base': typeof import("../../node_modules/nuxt/dist/head/runtime/components")['Base']
@@ -302,7 +302,7 @@ interface _GlobalComponents {
   'LazyVignettePmndrs': LazyComponent<typeof import("@tresjs/post-processing")['VignettePmndrs']>
   'LazyTresCanvas': LazyComponent<typeof import("../../node_modules/@tresjs/nuxt/dist/runtime/TresCanvas.client.vue")['default']>
   'LazyTresCanvas': LazyComponent<typeof import("../../node_modules/@tresjs/nuxt/dist/runtime/TresCanvas.server.vue")['default']>
-  'LazyNuxtPage': LazyComponent<typeof import("../../node_modules/nuxt/dist/pages/runtime/page-placeholder")['default']>
+  'LazyNuxtPage': LazyComponent<typeof import("../../node_modules/nuxt/dist/pages/runtime/page")['default']>
   'LazyNoScript': LazyComponent<typeof import("../../node_modules/nuxt/dist/head/runtime/components")['NoScript']>
   'LazyLink': LazyComponent<typeof import("../../node_modules/nuxt/dist/head/runtime/components")['Link']>
   'LazyBase': LazyComponent<typeof import("../../node_modules/nuxt/dist/head/runtime/components")['Base']>

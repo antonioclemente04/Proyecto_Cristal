@@ -153,7 +153,7 @@ export const UnrealBloom: typeof import("@tresjs/post-processing")['UnrealBloom'
 export const VignettePmndrs: typeof import("@tresjs/post-processing")['VignettePmndrs']
 export const TresCanvas: typeof import("../node_modules/@tresjs/nuxt/dist/runtime/TresCanvas.client.vue")['default']
 export const TresCanvas: typeof import("../node_modules/@tresjs/nuxt/dist/runtime/TresCanvas.server.vue")['default']
-export const NuxtPage: typeof import("../node_modules/nuxt/dist/pages/runtime/page-placeholder")['default']
+export const NuxtPage: typeof import("../node_modules/nuxt/dist/pages/runtime/page")['default']
 export const NoScript: typeof import("../node_modules/nuxt/dist/head/runtime/components")['NoScript']
 export const Link: typeof import("../node_modules/nuxt/dist/head/runtime/components")['Link']
 export const Base: typeof import("../node_modules/nuxt/dist/head/runtime/components")['Base']
@@ -302,7 +302,7 @@ export const LazyUnrealBloom: LazyComponent<typeof import("@tresjs/post-processi
 export const LazyVignettePmndrs: LazyComponent<typeof import("@tresjs/post-processing")['VignettePmndrs']>
 export const LazyTresCanvas: LazyComponent<typeof import("../node_modules/@tresjs/nuxt/dist/runtime/TresCanvas.client.vue")['default']>
 export const LazyTresCanvas: LazyComponent<typeof import("../node_modules/@tresjs/nuxt/dist/runtime/TresCanvas.server.vue")['default']>
-export const LazyNuxtPage: LazyComponent<typeof import("../node_modules/nuxt/dist/pages/runtime/page-placeholder")['default']>
+export const LazyNuxtPage: LazyComponent<typeof import("../node_modules/nuxt/dist/pages/runtime/page")['default']>
 export const LazyNoScript: LazyComponent<typeof import("../node_modules/nuxt/dist/head/runtime/components")['NoScript']>
 export const LazyLink: LazyComponent<typeof import("../node_modules/nuxt/dist/head/runtime/components")['Link']>
 export const LazyBase: LazyComponent<typeof import("../node_modules/nuxt/dist/head/runtime/components")['Base']>
