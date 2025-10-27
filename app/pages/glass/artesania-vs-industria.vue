@@ -18,10 +18,10 @@
             <img src="/images/furnace.webp" alt="cristal 1" loading="lazy" class="w-full h-auto block" />
           </div>
           <div class="break-inside-avoid">
-            <img src="/images/mouth.webp" alt="cristal 2" loading="lazy" class="w-full h-auto block" />
+            <img src="/images/bodies.webp" alt="cristal 2" loading="lazy" class="w-full h-auto block" />
           </div>
           <div class="break-inside-avoid">
-            <img src="/images/bodies.webp" alt="warm" loading="lazy" class="w-full h-auto block" />
+            <img src="/images/mouth.webp" alt="warm" loading="lazy" class="w-full h-auto block" />
           </div>
           <div class="break-inside-avoid">
             <img src="/images/blobs.webp" alt="warm" loading="lazy" class="w-full h-auto block" />
