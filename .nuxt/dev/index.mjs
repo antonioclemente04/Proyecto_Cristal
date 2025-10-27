@@ -3,39 +3,39 @@ import { Server } from 'node:http';
 import { resolve, dirname, join } from 'node:path';
 import nodeCrypto from 'node:crypto';
 import { parentPort, threadId } from 'node:worker_threads';
-import { defineEventHandler, handleCacheHeaders, splitCookiesString, createEvent, fetchWithEvent, isEvent, eventHandler, setHeaders, sendRedirect, proxyRequest, getRequestHeader, setResponseHeaders, setResponseStatus, send, getRequestHeaders, setResponseHeader, appendResponseHeader, getRequestURL, getResponseHeader, removeResponseHeader, createError, getQuery as getQuery$1, readBody, createApp, createRouter as createRouter$1, toNodeListener, lazyEventHandler, getResponseStatus, getRouterParam, getResponseStatusText } from 'file://C:/Users/Anto%C3%B1o/Desktop/Nueva%20carpeta%20(2)/Cristal_Final/node_modules/h3/dist/index.mjs';
-import { escapeHtml } from 'file://C:/Users/Anto%C3%B1o/Desktop/Nueva%20carpeta%20(2)/Cristal_Final/node_modules/@vue/shared/dist/shared.cjs.js';
-import { createRenderer, getRequestDependencies, getPreloadLinks, getPrefetchLinks } from 'file://C:/Users/Anto%C3%B1o/Desktop/Nueva%20carpeta%20(2)/Cristal_Final/node_modules/vue-bundle-renderer/dist/runtime.mjs';
-import { parseURL, withoutBase, joinURL, getQuery, withQuery, withTrailingSlash, decodePath, withLeadingSlash, withoutTrailingSlash, joinRelativeURL } from 'file://C:/Users/Anto%C3%B1o/Desktop/Nueva%20carpeta%20(2)/Cristal_Final/node_modules/ufo/dist/index.mjs';
-import destr, { destr as destr$1 } from 'file://C:/Users/Anto%C3%B1o/Desktop/Nueva%20carpeta%20(2)/Cristal_Final/node_modules/destr/dist/index.mjs';
-import { renderToString } from 'file://C:/Users/Anto%C3%B1o/Desktop/Nueva%20carpeta%20(2)/Cristal_Final/node_modules/vue/server-renderer/index.mjs';
-import { klona } from 'file://C:/Users/Anto%C3%B1o/Desktop/Nueva%20carpeta%20(2)/Cristal_Final/node_modules/klona/dist/index.mjs';
-import defu, { defuFn } from 'file://C:/Users/Anto%C3%B1o/Desktop/Nueva%20carpeta%20(2)/Cristal_Final/node_modules/defu/dist/defu.mjs';
-import { snakeCase } from 'file://C:/Users/Anto%C3%B1o/Desktop/Nueva%20carpeta%20(2)/Cristal_Final/node_modules/scule/dist/index.mjs';
-import { createHead as createHead$1, propsToString, renderSSRHead } from 'file://C:/Users/Anto%C3%B1o/Desktop/Nueva%20carpeta%20(2)/Cristal_Final/node_modules/unhead/dist/server.mjs';
-import { stringify, uneval } from 'file://C:/Users/Anto%C3%B1o/Desktop/Nueva%20carpeta%20(2)/Cristal_Final/node_modules/devalue/index.js';
-import { isVNode, toValue, isRef } from 'file://C:/Users/Anto%C3%B1o/Desktop/Nueva%20carpeta%20(2)/Cristal_Final/node_modules/vue/index.mjs';
-import { createHooks } from 'file://C:/Users/Anto%C3%B1o/Desktop/Nueva%20carpeta%20(2)/Cristal_Final/node_modules/hookable/dist/index.mjs';
-import { createFetch, Headers as Headers$1 } from 'file://C:/Users/Anto%C3%B1o/Desktop/Nueva%20carpeta%20(2)/Cristal_Final/node_modules/ofetch/dist/node.mjs';
-import { fetchNodeRequestHandler, callNodeRequestHandler } from 'file://C:/Users/Anto%C3%B1o/Desktop/Nueva%20carpeta%20(2)/Cristal_Final/node_modules/node-mock-http/dist/index.mjs';
-import { createStorage, prefixStorage } from 'file://C:/Users/Anto%C3%B1o/Desktop/Nueva%20carpeta%20(2)/Cristal_Final/node_modules/unstorage/dist/index.mjs';
-import unstorage_47drivers_47fs from 'file://C:/Users/Anto%C3%B1o/Desktop/Nueva%20carpeta%20(2)/Cristal_Final/node_modules/unstorage/drivers/fs.mjs';
-import { digest } from 'file://C:/Users/Anto%C3%B1o/Desktop/Nueva%20carpeta%20(2)/Cristal_Final/node_modules/ohash/dist/index.mjs';
-import { toRouteMatcher, createRouter } from 'file://C:/Users/Anto%C3%B1o/Desktop/Nueva%20carpeta%20(2)/Cristal_Final/node_modules/radix3/dist/index.mjs';
+import { defineEventHandler, handleCacheHeaders, splitCookiesString, createEvent, fetchWithEvent, isEvent, eventHandler, setHeaders, sendRedirect, proxyRequest, getRequestHeader, setResponseHeaders, setResponseStatus, send, getRequestHeaders, setResponseHeader, appendResponseHeader, getRequestURL, getResponseHeader, removeResponseHeader, createError, getQuery as getQuery$1, readBody, createApp, createRouter as createRouter$1, toNodeListener, lazyEventHandler, getResponseStatus, getRouterParam, getResponseStatusText } from 'file://C:/Users/usuario/OneDrive/Desktop/Proyectos%20ESD/4%C2%BA/Proyectos/Glass%20Lab/Web/Proyecto_Cristal/node_modules/h3/dist/index.mjs';
+import { escapeHtml } from 'file://C:/Users/usuario/OneDrive/Desktop/Proyectos%20ESD/4%C2%BA/Proyectos/Glass%20Lab/Web/Proyecto_Cristal/node_modules/@vue/shared/dist/shared.cjs.js';
+import { createRenderer, getRequestDependencies, getPreloadLinks, getPrefetchLinks } from 'file://C:/Users/usuario/OneDrive/Desktop/Proyectos%20ESD/4%C2%BA/Proyectos/Glass%20Lab/Web/Proyecto_Cristal/node_modules/vue-bundle-renderer/dist/runtime.mjs';
+import { parseURL, withoutBase, joinURL, getQuery, withQuery, withTrailingSlash, decodePath, withLeadingSlash, withoutTrailingSlash, joinRelativeURL } from 'file://C:/Users/usuario/OneDrive/Desktop/Proyectos%20ESD/4%C2%BA/Proyectos/Glass%20Lab/Web/Proyecto_Cristal/node_modules/ufo/dist/index.mjs';
+import destr, { destr as destr$1 } from 'file://C:/Users/usuario/OneDrive/Desktop/Proyectos%20ESD/4%C2%BA/Proyectos/Glass%20Lab/Web/Proyecto_Cristal/node_modules/destr/dist/index.mjs';
+import { renderToString } from 'file://C:/Users/usuario/OneDrive/Desktop/Proyectos%20ESD/4%C2%BA/Proyectos/Glass%20Lab/Web/Proyecto_Cristal/node_modules/vue/server-renderer/index.mjs';
+import { klona } from 'file://C:/Users/usuario/OneDrive/Desktop/Proyectos%20ESD/4%C2%BA/Proyectos/Glass%20Lab/Web/Proyecto_Cristal/node_modules/klona/dist/index.mjs';
+import defu, { defuFn } from 'file://C:/Users/usuario/OneDrive/Desktop/Proyectos%20ESD/4%C2%BA/Proyectos/Glass%20Lab/Web/Proyecto_Cristal/node_modules/defu/dist/defu.mjs';
+import { snakeCase } from 'file://C:/Users/usuario/OneDrive/Desktop/Proyectos%20ESD/4%C2%BA/Proyectos/Glass%20Lab/Web/Proyecto_Cristal/node_modules/scule/dist/index.mjs';
+import { createHead as createHead$1, propsToString, renderSSRHead } from 'file://C:/Users/usuario/OneDrive/Desktop/Proyectos%20ESD/4%C2%BA/Proyectos/Glass%20Lab/Web/Proyecto_Cristal/node_modules/unhead/dist/server.mjs';
+import { stringify, uneval } from 'file://C:/Users/usuario/OneDrive/Desktop/Proyectos%20ESD/4%C2%BA/Proyectos/Glass%20Lab/Web/Proyecto_Cristal/node_modules/devalue/index.js';
+import { isVNode, toValue, isRef } from 'file://C:/Users/usuario/OneDrive/Desktop/Proyectos%20ESD/4%C2%BA/Proyectos/Glass%20Lab/Web/Proyecto_Cristal/node_modules/vue/index.mjs';
+import { createHooks } from 'file://C:/Users/usuario/OneDrive/Desktop/Proyectos%20ESD/4%C2%BA/Proyectos/Glass%20Lab/Web/Proyecto_Cristal/node_modules/hookable/dist/index.mjs';
+import { createFetch, Headers as Headers$1 } from 'file://C:/Users/usuario/OneDrive/Desktop/Proyectos%20ESD/4%C2%BA/Proyectos/Glass%20Lab/Web/Proyecto_Cristal/node_modules/ofetch/dist/node.mjs';
+import { fetchNodeRequestHandler, callNodeRequestHandler } from 'file://C:/Users/usuario/OneDrive/Desktop/Proyectos%20ESD/4%C2%BA/Proyectos/Glass%20Lab/Web/Proyecto_Cristal/node_modules/node-mock-http/dist/index.mjs';
+import { createStorage, prefixStorage } from 'file://C:/Users/usuario/OneDrive/Desktop/Proyectos%20ESD/4%C2%BA/Proyectos/Glass%20Lab/Web/Proyecto_Cristal/node_modules/unstorage/dist/index.mjs';
+import unstorage_47drivers_47fs from 'file://C:/Users/usuario/OneDrive/Desktop/Proyectos%20ESD/4%C2%BA/Proyectos/Glass%20Lab/Web/Proyecto_Cristal/node_modules/unstorage/drivers/fs.mjs';
+import { digest } from 'file://C:/Users/usuario/OneDrive/Desktop/Proyectos%20ESD/4%C2%BA/Proyectos/Glass%20Lab/Web/Proyecto_Cristal/node_modules/ohash/dist/index.mjs';
+import { toRouteMatcher, createRouter } from 'file://C:/Users/usuario/OneDrive/Desktop/Proyectos%20ESD/4%C2%BA/Proyectos/Glass%20Lab/Web/Proyecto_Cristal/node_modules/radix3/dist/index.mjs';
 import { readFile } from 'node:fs/promises';
-import consola, { consola as consola$1 } from 'file://C:/Users/Anto%C3%B1o/Desktop/Nueva%20carpeta%20(2)/Cristal_Final/node_modules/consola/dist/index.mjs';
-import { ErrorParser } from 'file://C:/Users/Anto%C3%B1o/Desktop/Nueva%20carpeta%20(2)/Cristal_Final/node_modules/youch-core/build/index.js';
-import { Youch } from 'file://C:/Users/Anto%C3%B1o/Desktop/Nueva%20carpeta%20(2)/Cristal_Final/node_modules/youch/build/index.js';
-import { SourceMapConsumer } from 'file://C:/Users/Anto%C3%B1o/Desktop/Nueva%20carpeta%20(2)/Cristal_Final/node_modules/source-map/source-map.js';
+import consola, { consola as consola$1 } from 'file://C:/Users/usuario/OneDrive/Desktop/Proyectos%20ESD/4%C2%BA/Proyectos/Glass%20Lab/Web/Proyecto_Cristal/node_modules/consola/dist/index.mjs';
+import { ErrorParser } from 'file://C:/Users/usuario/OneDrive/Desktop/Proyectos%20ESD/4%C2%BA/Proyectos/Glass%20Lab/Web/Proyecto_Cristal/node_modules/youch-core/build/index.js';
+import { Youch } from 'file://C:/Users/usuario/OneDrive/Desktop/Proyectos%20ESD/4%C2%BA/Proyectos/Glass%20Lab/Web/Proyecto_Cristal/node_modules/youch/build/index.js';
+import { SourceMapConsumer } from 'file://C:/Users/usuario/OneDrive/Desktop/Proyectos%20ESD/4%C2%BA/Proyectos/Glass%20Lab/Web/Proyecto_Cristal/node_modules/source-map/source-map.js';
 import { AsyncLocalStorage } from 'node:async_hooks';
-import { getContext } from 'file://C:/Users/Anto%C3%B1o/Desktop/Nueva%20carpeta%20(2)/Cristal_Final/node_modules/unctx/dist/index.mjs';
-import { captureRawStackTrace, parseRawStackTrace } from 'file://C:/Users/Anto%C3%B1o/Desktop/Nueva%20carpeta%20(2)/Cristal_Final/node_modules/errx/dist/index.js';
+import { getContext } from 'file://C:/Users/usuario/OneDrive/Desktop/Proyectos%20ESD/4%C2%BA/Proyectos/Glass%20Lab/Web/Proyecto_Cristal/node_modules/unctx/dist/index.mjs';
+import { captureRawStackTrace, parseRawStackTrace } from 'file://C:/Users/usuario/OneDrive/Desktop/Proyectos%20ESD/4%C2%BA/Proyectos/Glass%20Lab/Web/Proyecto_Cristal/node_modules/errx/dist/index.js';
 import { promises } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { dirname as dirname$1, resolve as resolve$1 } from 'file://C:/Users/Anto%C3%B1o/Desktop/Nueva%20carpeta%20(2)/Cristal_Final/node_modules/pathe/dist/index.mjs';
-import { walkResolver } from 'file://C:/Users/Anto%C3%B1o/Desktop/Nueva%20carpeta%20(2)/Cristal_Final/node_modules/unhead/dist/utils.mjs';
+import { dirname as dirname$1, resolve as resolve$1 } from 'file://C:/Users/usuario/OneDrive/Desktop/Proyectos%20ESD/4%C2%BA/Proyectos/Glass%20Lab/Web/Proyecto_Cristal/node_modules/pathe/dist/index.mjs';
+import { walkResolver } from 'file://C:/Users/usuario/OneDrive/Desktop/Proyectos%20ESD/4%C2%BA/Proyectos/Glass%20Lab/Web/Proyecto_Cristal/node_modules/unhead/dist/utils.mjs';
 
-const serverAssets = [{"baseName":"server","dir":"C:/Users/Antoño/Desktop/Nueva carpeta (2)/Cristal_Final/server/assets"}];
+const serverAssets = [{"baseName":"server","dir":"C:/Users/usuario/OneDrive/Desktop/Proyectos ESD/4º/Proyectos/Glass Lab/Web/Proyecto_Cristal/server/assets"}];
 
 const assets$1 = createStorage();
 
@@ -47,11 +47,11 @@ const storage = createStorage({});
 
 storage.mount('/assets', assets$1);
 
-storage.mount('root', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"C:/Users/Antoño/Desktop/Nueva carpeta (2)/Cristal_Final","watchOptions":{"ignored":[null]}}));
-storage.mount('src', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"C:/Users/Antoño/Desktop/Nueva carpeta (2)/Cristal_Final/server","watchOptions":{"ignored":[null]}}));
-storage.mount('build', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"C:/Users/Antoño/Desktop/Nueva carpeta (2)/Cristal_Final/.nuxt"}));
-storage.mount('cache', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"C:/Users/Antoño/Desktop/Nueva carpeta (2)/Cristal_Final/.nuxt/cache"}));
-storage.mount('data', unstorage_47drivers_47fs({"driver":"fs","base":"C:/Users/Antoño/Desktop/Nueva carpeta (2)/Cristal_Final/.data/kv"}));
+storage.mount('root', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"C:/Users/usuario/OneDrive/Desktop/Proyectos ESD/4º/Proyectos/Glass Lab/Web/Proyecto_Cristal","watchOptions":{"ignored":[null]}}));
+storage.mount('src', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"C:/Users/usuario/OneDrive/Desktop/Proyectos ESD/4º/Proyectos/Glass Lab/Web/Proyecto_Cristal/server","watchOptions":{"ignored":[null]}}));
+storage.mount('build', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"C:/Users/usuario/OneDrive/Desktop/Proyectos ESD/4º/Proyectos/Glass Lab/Web/Proyecto_Cristal/.nuxt"}));
+storage.mount('cache', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"C:/Users/usuario/OneDrive/Desktop/Proyectos ESD/4º/Proyectos/Glass Lab/Web/Proyecto_Cristal/.nuxt/cache"}));
+storage.mount('data', unstorage_47drivers_47fs({"driver":"fs","base":"C:/Users/usuario/OneDrive/Desktop/Proyectos ESD/4º/Proyectos/Glass Lab/Web/Proyecto_Cristal/.data/kv"}));
 
 function useStorage(base = "") {
   return base ? prefixStorage(storage, base) : storage;
@@ -1011,13 +1011,13 @@ if (!window.__NUXT_DEVTOOLS_TIME_METRIC__) {
 window.__NUXT_DEVTOOLS_TIME_METRIC__.appInit = Date.now()
 `;
 
-const _PFc6ZxUXIhNM420e_Oe17JkqUcBJFMd37CIyDsTLoA = (function(nitro) {
+const _46UyC8vQKRSA8zEP6L53OnX7IUQNCThYtY70nyfYU7M = (function(nitro) {
   nitro.hooks.hook("render:html", (htmlContext) => {
     htmlContext.head.push(`<script>${script}<\/script>`);
   });
 });
 
-const rootDir = "C:/Users/Antoño/Desktop/Nueva carpeta (2)/Cristal_Final";
+const rootDir = "C:/Users/usuario/OneDrive/Desktop/Proyectos ESD/4º/Proyectos/Glass Lab/Web/Proyecto_Cristal";
 
 const appHead = {"meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1"}],"link":[{"rel":"icon","type":"image/x-icon","href":"data:,"},{"rel":"shortcut icon","type":"image/x-icon","href":"data:,"}],"style":[],"script":[],"noscript":[],"title":"GLASS LAB®"};
 
@@ -1040,7 +1040,7 @@ const devReducers = {
   URL: (data) => data instanceof URL ? data.toString() : void 0
 };
 const asyncContext = getContext("nuxt-dev", { asyncContext: true, AsyncLocalStorage });
-const _wohYiJl3o0f5R0e8N89FtmxbeqJG2UQKjwrSvad34w = (nitroApp) => {
+const _c1y_j6y3T_hU4rKey4FCDN0SLFf5OaLw2p4oa0K96cU = (nitroApp) => {
   const handler = nitroApp.h3App.handler;
   nitroApp.h3App.handler = (event) => {
     return asyncContext.callAsync({ logs: [], event }, () => handler(event));
@@ -1110,8 +1110,8 @@ function onConsoleLog(callback) {
 }
 
 const plugins = [
-  _PFc6ZxUXIhNM420e_Oe17JkqUcBJFMd37CIyDsTLoA,
-_wohYiJl3o0f5R0e8N89FtmxbeqJG2UQKjwrSvad34w
+  _46UyC8vQKRSA8zEP6L53OnX7IUQNCThYtY70nyfYU7M,
+_c1y_j6y3T_hU4rKey4FCDN0SLFf5OaLw2p4oa0K96cU
 ];
 
 const assets = {};
@@ -1139,7 +1139,7 @@ function getAsset (id) {
 
 const METHODS = /* @__PURE__ */ new Set(["HEAD", "GET"]);
 const EncodingMap = { gzip: ".gz", br: ".br" };
-const _vTJkFH = eventHandler((event) => {
+const _Pz3bN1 = eventHandler((event) => {
   if (event.method && !METHODS.has(event.method)) {
     return;
   }
@@ -1275,8 +1275,8 @@ function publicAssetsURL(...path) {
 
 const APP_ROOT_OPEN_TAG = `<${appRootTag}${propsToString(appRootAttrs)}>`;
 const APP_ROOT_CLOSE_TAG = `</${appRootTag}>`;
-const getServerEntry = () => import('file://C:/Users/Anto%C3%B1o/Desktop/Nueva%20carpeta%20(2)/Cristal_Final/.nuxt//dist/server/server.mjs').then((r) => r.default || r);
-const getClientManifest = () => import('file://C:/Users/Anto%C3%B1o/Desktop/Nueva%20carpeta%20(2)/Cristal_Final/.nuxt//dist/server/client.manifest.mjs').then((r) => r.default || r).then((r) => typeof r === "function" ? r() : r);
+const getServerEntry = () => import('file://C:/Users/usuario/OneDrive/Desktop/Proyectos%20ESD/4%C2%BA/Proyectos/Glass%20Lab/Web/Proyecto_Cristal/.nuxt//dist/server/server.mjs').then((r) => r.default || r);
+const getClientManifest = () => import('file://C:/Users/usuario/OneDrive/Desktop/Proyectos%20ESD/4%C2%BA/Proyectos/Glass%20Lab/Web/Proyecto_Cristal/.nuxt//dist/server/client.manifest.mjs').then((r) => r.default || r).then((r) => typeof r === "function" ? r() : r);
 const getSSRRenderer = lazyCachedFunction(async () => {
   const manifest = await getClientManifest();
   if (!manifest) {
@@ -1527,13 +1527,13 @@ async function getIslandContext(event) {
   return ctx;
 }
 
-const _lazy_mQrW7w = () => Promise.resolve().then(function () { return renderer$1; });
+const _lazy_w5WcbS = () => Promise.resolve().then(function () { return renderer$1; });
 
 const handlers = [
-  { route: '', handler: _vTJkFH, lazy: false, middleware: true, method: undefined },
-  { route: '/__nuxt_error', handler: _lazy_mQrW7w, lazy: true, middleware: false, method: undefined },
+  { route: '', handler: _Pz3bN1, lazy: false, middleware: true, method: undefined },
+  { route: '/__nuxt_error', handler: _lazy_w5WcbS, lazy: true, middleware: false, method: undefined },
   { route: '/__nuxt_island/**', handler: _SxA8c9, lazy: false, middleware: false, method: undefined },
-  { route: '/**', handler: _lazy_mQrW7w, lazy: true, middleware: false, method: undefined }
+  { route: '/**', handler: _lazy_w5WcbS, lazy: true, middleware: false, method: undefined }
 ];
 
 function createNitroApp() {

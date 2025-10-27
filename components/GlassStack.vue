@@ -9,6 +9,7 @@
       class="cursor-label pointer-events-none fixed select-none"
       aria-hidden="true"
       ref="cursorLabelEl"
+      :data-text="cursorText"
     >
       {{ cursorText }}
     </div>
@@ -660,51 +661,73 @@ watch(() => props.projects, (nv, ov) => {
   border: 0 !important;
 }
 
-/* Cursor label styles: reemplaza cursor nativo */
+/* Cursor label styles: reemplaza cursor nativo
+   - usamos dos capas: ::before = fallback (trazo/contorno), ::after = capa que hace mix-blend 'difference'
+   - el elemento principal se deja con color: transparent para que no duplique texto visible
+*/
 .cursor-label {
   pointer-events: none;
   user-select: none;
   position: fixed;
   z-index: 9999;
-  color: white;
-  border-radius: 4px;
   font-size: 14px;
   font-weight: 500;
   white-space: nowrap;
   font-family: 'Cabinet Grotesk', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-  
-  /* Efecto de texto con borde */
-  text-shadow: 
-    -1px -1px 0 #FFF,
-     0   -1px 0 #FFF,
-     1px -1px 0 #FFF,
-     1px  0   0 #FFF,
-     0    1px 0 #FFF,
-     1px  1px 0 #FFF,
-     0    1px 0 #FFF,
-    -1px  1px 0 #FFF,
-    -1px  0   0 #FFF;
-  
-  /* Mejorar renderizado */
+  left: 0;
+  top: 0;
+  /* el posicionamiento exacto lo controla cursorStyle (left/top + transform) */
+  color: transparent; /* ocultamos el texto del elemento: visualizamos pseudo-elementos */
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  isolation: isolate; /* limitar el contexto de mezcla (mix-blend-mode) */
+  will-change: transform;
+  transform: translateZ(0);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  
-  /* Efecto de inversión */
-  filter: invert(1) hue-rotate(180deg);
-  mix-blend-mode: difference;
-  
-  /* Asegurar que esté por encima de todo */
-  will-change: transform;
-  transform: translateZ(0);
-  -webkit-transform: translateZ(0);
-  
-  /* Asegurar que el texto sea visible en cualquier fondo */
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-  padding: 6px 14px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* CAPA DE CONTORNO / FALLBACK (debajo) */
+/* - combina -webkit-text-stroke para navegadores WebKit + text-shadow para Firefox o navegadores que no acepten stroke */
+.cursor-label::before {
+  content: attr(data-text);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  color: rgba(255,255,255,0.98);                /* texto claramente legible por defecto */
+  -webkit-text-stroke: 0.9px rgba(0,0,0,0.72);  /* trazo oscuro (Chromium/Safari) */
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  z-index: 1;
+  pointer-events: none;
+  /* fallback shadow para navegadores sin text-stroke (ej. Firefox) */
+  text-shadow:
+    -1px -1px 0 rgba(0,0,0,0.72),
+     1px -1px 0 rgba(0,0,0,0.72),
+     1px  1px 0 rgba(0,0,0,0.72),
+    -1px  1px 0 rgba(0,0,0,0.72);
+}
+
+/* CAPA DE INVERSIÓN (arriba): aquí ocurre la mezcla difference */
+.cursor-label::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  color: #ffffff;               /* base para la operación difference */
+  mix-blend-mode: difference;   /* invierte colores donde se superpone */
+  opacity: 0.94;                /* permitir que el fallback asome ligeramente si la mezcla empata */
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  z-index: 2;
+  pointer-events: none;
 }
 
 /* esconder label en pantallas táctiles / móviles */
@@ -715,3 +738,4 @@ watch(() => props.projects, (nv, ov) => {
 /* imagen responsive */
 img.object-cover { display: block; width: 100%; height: auto; }
 </style>
+  

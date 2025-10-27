@@ -80,12 +80,12 @@ const splineWrap = ref(null)
 const glassStack = ref(null)
 
 const projects = ref([
-  { id: 'glass-roman',     title: 'Vidrio Romano',    imageSmall: '/images/reloj-small.webp', image: '/images/reloj.webp', century: 'S. I–III', href: '../glass/cristal-ciencia' },
-  { id: 'glass-medieval',  title: 'Vidrio Medieval',  imageSmall: '/images/warm.webp', image: '/images/warm.webp', century: 'S. V–XV', href: '/glass/artesania-vs-industria' },
-  { id: 'glass-venetian',  title: 'Soplado Veneciano', imageSmall: '/images/bulet.webp', image: '/images/bullet.webp', century: 'S. XIII–XVII', href: '/glass/fragilidad-vs-resistencia' },
-  { id: 'glass-industrial',title: 'Vidrio Industrial',imageSmall: '/images/reloj-small.webp', image: '/images/camara2.webp', century: 'S. XVIII', href: '/glass/escaparate' },
-  { id: 'glass-catalogue', title: 'Catálogo Vítreo',  imageSmall: '/images/reloj-small.webp', image: '/images/cristal1.webp', century: 'S. XIX', href: '/glass/espejo' },
-  { id: 'glass-modern',    title: 'Vidrio Moderno',   imageSmall: '/images/reloj-small.webp', image: '/images/cristal2.webp', century: 'S. XX', href: '/glass/Pantallas' },
+  //{ id: 'glass-roman',     title: 'Vidrio Romano',    imageSmall: '/images/reloj-small.webp', image: '/images/reloj.webp', century: 'S. I–III', href: '../glass/cristal-ciencia' },
+  { id: 'LA CREACIÓN',  title: 'LA CREACIÓN',  imageSmall: '/images/warm.webp', image: '/images/warm.webp', century: 'S. V–XV', href: '/glass/artesania-vs-industria' },
+  //{ id: 'FRAGILIDAD',  title: 'FRAGILIDAD', imageSmall: '/images/bulet.webp', image: '/images/bullet.webp', century: 'S. XIII–XVII', href: '/glass/fragilidad-vs-resistencia' },
+  { id: 'ESCAPARATES',title: 'ESCAPARATES',imageSmall: '/images/reloj-small.webp', image: '/images/adds.png', century: 'S. XVIII', href: '/glass/escaparate' },
+  { id: 'ESPEJOS', title: 'ESPEJOS',  imageSmall: '/images/reloj-small.webp', image: '/images/mirror.jpg', century: 'S. XIX', href: '/glass/espejo' },
+  { id: 'PANTALLAS',    title: 'PANTALLAS',   imageSmall: '/images/reloj-small.webp', image: '/images/screen.png', century: 'S. XX', href: '/glass/Pantallas' },
 ])
 
 /* gestión recursos y timers */
