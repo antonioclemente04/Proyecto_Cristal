@@ -1,0 +1,1 @@
+export { default } from "file:///C:/Users/Anto%C3%B1o/Desktop/Glass_LAB/Proyecto_Cristal-Casi_todo/node_modules/@nuxt/vite-builder/dist/runtime/vite-node.mjs"
