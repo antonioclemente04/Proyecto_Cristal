@@ -3,6 +3,7 @@
   "type": "module",
   "private": true,
   "scripts": {
+    "install": "npm install --unsafe-perm",
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
@@ -11,7 +12,8 @@
     "vercel-build": "nuxt build"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=18.0.0 <19",
+    "npm": ">=9.0.0"
   },
   "dependencies": {
     "@tresjs/cientos": "^5.1.0",
