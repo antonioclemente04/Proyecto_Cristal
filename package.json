@@ -12,8 +12,8 @@
     "vercel-build": "npm install --unsafe-perm && nuxt build"
   },
   "engines": {
-    "node": ">=18.0.0 <19",
-    "npm": ">=9.0.0"
+    "node": "22.x",
+    "npm": ">=10.0.0"
   },
   "dependencies": {
     "@tresjs/cientos": "^5.1.0",
