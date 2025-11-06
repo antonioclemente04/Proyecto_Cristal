@@ -3,13 +3,12 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "install": "npm install --unsafe-perm",
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "npm rebuild && nuxt prepare",
-    "vercel-build": "npm install --unsafe-perm && nuxt build"
+    "postinstall": "nuxt prepare",
+    "vercel-build": "nuxt build"
   },
   "engines": {
     "node": "22.x",
