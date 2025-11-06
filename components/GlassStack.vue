@@ -44,8 +44,11 @@
 /* GlassStack.vue — responsive & touch-friendly */
 import { ref, onMounted, onBeforeUnmount, watch, computed, getCurrentInstance } from 'vue'
 import * as THREE from 'three'
+import { gsap } from 'gsap'
 import { useRouter } from 'vue-router'
 import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js'
+
+const SRGBColorSpace = THREE.SRGBColorSpace
 
 const props = defineProps({
   projects: { type: Array, default: () => [] },
@@ -142,7 +145,7 @@ function loadTextureSmall(urlSmall) {
   try {
     const loader = new THREE.TextureLoader()
     const t = loader.load(urlSmall)
-    t.encoding = THREE.sRGBEncoding
+    t.colorSpace = SRGBColorSpace
     t.minFilter = THREE.LinearMipMapLinearFilter
     t.magFilter = THREE.LinearFilter
     t.generateMipmaps = true
@@ -152,7 +155,7 @@ function loadTextureSmall(urlSmall) {
 function loadTextureHigh(urlHigh, frontMaterial) {
   const loader = new THREE.TextureLoader()
   loader.load(urlHigh, tex => {
-    tex.encoding = THREE.sRGBEncoding
+    tex.colorSpace = SRGBColorSpace
     tex.minFilter = THREE.LinearMipMapLinearFilter
     tex.magFilter = THREE.LinearFilter
     if (frontMaterial && !frontMaterial.disposed) {
@@ -492,10 +495,13 @@ function initScene() {
   camera.position.set(0, 0, 1200)
   camera.lookAt(0, 0, 0)
 
-  renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
+  renderer = new THREE.WebGLRenderer({ 
+    antialias: true, 
+    alpha: true 
+  })
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2))
   renderer.setSize(w, h)
-  renderer.outputEncoding = THREE.sRGBEncoding
+  renderer.outputColorSpace = SRGBColorSpace
 
   renderer.domElement.style.cursor = ''
 
