@@ -8,8 +8,8 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare",
-    "vercel-build": "nuxt build"
+    "postinstall": "npm rebuild && nuxt prepare",
+    "vercel-build": "npm install --unsafe-perm && nuxt build"
   },
   "engines": {
     "node": ">=18.0.0 <19",
