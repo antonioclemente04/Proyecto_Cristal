@@ -1019,7 +1019,7 @@ const _81EXQ4erhb0EruaFXcKKHNT2DKaOrTcXZVvLO0gUC4 = (function(nitro) {
 
 const rootDir = "C:/Users/Antoño/Desktop/Glass_LAB/Proyecto_Cristal-Casi_todo";
 
-const appHead = {"meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1"}],"link":[{"rel":"icon","type":"image/x-icon","href":"data:,"},{"rel":"shortcut icon","type":"image/x-icon","href":"data:,"}],"style":[],"script":[],"noscript":[],"title":"GLASS LAB®"};
+const appHead = {"meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1"},{"name":"description","content":"Glass Lab - Explore our collection"}],"link":[{"rel":"icon","type":"image/x-icon","href":"data:,"},{"rel":"shortcut icon","type":"image/x-icon","href":"data:,"}],"style":[],"script":[],"noscript":[],"title":"GLASS LAB®"};
 
 const appRootTag = "div";
 
